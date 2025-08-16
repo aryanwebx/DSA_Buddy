@@ -6,7 +6,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { BotIcon, UserIcon } from "../utils/Icon";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import TextareaAutosize from 'react-textarea-autosize';
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const getSessionId = () => {
@@ -59,7 +59,7 @@ export default function Chatbot() {
     setIsStreaming(true);
     const sessionId = getSessionId();
     try {
-      const response = await fetch("http://localhost:3000/chatbot", {
+      const response = await fetch(`${API_URL}/chatbot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userQues: userMessage ,session:sessionId}),
