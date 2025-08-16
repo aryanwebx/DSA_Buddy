@@ -8,9 +8,16 @@ app.use(express.json());
 
 app.post('/chatbot', async (req, res) => {
     try {
-        const {userQues,session}=req.body;
-        const response = await main(userQues,session);
-        res.send(response);
+        const { userQues, session } = req.body;
+        res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Transfer-Encoding', 'chunked');
+        const stream = main(userQues, session);
+
+        for await (const chunk of stream) {
+
+            res.write(chunk);
+        }
+        res.end();
     } catch (err) {
         res.status(500).send("Internal Server Error");
     }

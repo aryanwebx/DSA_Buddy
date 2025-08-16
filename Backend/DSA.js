@@ -9,11 +9,11 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 
 const userHistories = new Map();
-async function main(userQues,session) {
-    
+async function* main(userQues, session) {
+
     const userQuery = String(userQues);
 
-    if(!session){
+    if (!session) {
         return "Error: User ID is missing.";
     }
 
@@ -26,10 +26,10 @@ async function main(userQues,session) {
         role: 'user',
         parts: [{ text: userQuery }]
     })
-    
-   
 
-    const response = await ai.models.generateContent({
+
+
+    const response = await ai.models.generateContentStream({
         model: "gemini-2.5-flash",
         contents: History,
         config: {
@@ -49,17 +49,23 @@ Your personality is a mix of Friendly Mentor + Strict Guide.You are Fun + Focuse
         }
     });
 
-    
+
+    let fullRespone = "";
+    for await (const chunk of response) {
+        const chunkText = chunk.text;
+        fullRespone += chunkText;
+        
+        yield chunkText;
+    }
+
     History.push({
         role: 'model',
-        parts: [{ text: response.text }]
+        parts: [{ text: fullRespone }]
     })
 
     if (History.length > 20) {
-        History.splice(0, 2); 
+        History.splice(0, 2);
     }
-   
-    return response.text;
 
 }
 
