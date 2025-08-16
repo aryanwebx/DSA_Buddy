@@ -8,13 +8,13 @@ app.use(express.json());
 
 app.post('/chatbot', async (req, res) => {
     try {
-        const { userQues, session } = req.body;
+        const {userQues,session}=req.body;
         res.setHeader('Content-Type', 'text/plain');
         res.setHeader('Transfer-Encoding', 'chunked');
         const stream = main(userQues, session);
 
-        for await (const chunk of stream) {
-
+        for await (const chunk of stream){
+            
             res.write(chunk);
         }
         res.end();
