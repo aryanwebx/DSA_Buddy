@@ -12,7 +12,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const getSessionId = () => {
   let sessionId = sessionStorage.getItem('dsaBuddySessionId');
   if (!sessionId) {
-    sessionId = crypto.randomUUID(); // Modern way to get a unique ID
+    sessionId = crypto.randomUUID();
     sessionStorage.setItem('dsaBuddySessionId', sessionId);
   }
   return sessionId;
@@ -118,27 +118,28 @@ export default function Chatbot() {
 
   return (
     <div className='flex flex-col h-screen bg-[#0B251A] text-stone-100 font-sans'>
-      <div className='flex-grow p-6 overflow-y-auto'>
+      <div className='flex-grow p-4 md:p-6 overflow-y-auto'>
         <div className='max-w-4xl mx-auto flex flex-col space-y-8'>
           {chat.length === 0 ? (
             <div className='flex justify-center items-center h-full pt-20'>
-              <div className='text-center p-10 bg-[#163E2C]/50 rounded-xl shadow-xl border border-green-900/50'>
-                <h2 className='text-3xl font-bold mb-2 text-amber-400'>Your DSA Buddy</h2>
-                <p className='text-green-200 text-lg'>Decode, Learn, Conquer!</p>
+              <div className='text-center p-6 md:p-10 bg-[#163E2C]/50 rounded-xl shadow-xl border border-green-900/50'>
+                <h2 className='text-2xl md:text-3xl font-bold mb-2 text-amber-400'>Your DSA Buddy</h2>
+                <p className='text-green-200 text-base md:text-lg'>Decode, Learn, Conquer!</p>
               </div>
             </div>
           ) : (
             chat.map((msg, index) => (
               <div key={index}>
                 <div className='flex justify-end items-start space-x-3'>
-                  <div className='bg-amber-600 text-white px-5 py-3 rounded-2xl rounded-tr-none shadow-lg max-w-2xl'>
+                  <div className='bg-amber-600 text-white px-4 py-3 md:px-5 rounded-2xl rounded-tr-none shadow-lg max-w-2xl'>
                     {msg}
                   </div>
                   <UserIcon />
                 </div>
                 <div className='flex justify-start items-start space-x-3 mt-4'>
                   <BotIcon />
-                  <div className='bg-[#163E2C] text-stone-200 px-5 py-3 rounded-2xl rounded-tl-none shadow-lg max-w-2xl prose prose-invert prose-base prose-p:my-3 prose-headings:my-5 flex gap-3 flex-col'>
+                  {/* NEW FIX: Added `min-w-0` here to allow the flex child to shrink */}
+                  <div className='min-w-0 bg-[#163E2C] text-stone-200 px-4 py-3 md:px-5 rounded-2xl rounded-tl-none shadow-lg max-w-2xl prose prose-invert prose-base prose-p:my-3 prose-headings:my-5 flex gap-3 flex-col'>
                     {bot[index] === "..." ? (
                       <div className='flex items-center space-x-1 py-1'>
                         <div className='w-2 h-2 bg-amber-400 rounded-full animate-bounce' />
@@ -155,7 +156,7 @@ export default function Chatbot() {
 
                             if (isBlock) {
                               return (
-                                <div className='bg-[#0A1D13] rounded-lg my-4 overflow-hidden border border-green-900'>
+                                <div className='bg-[#0A1D13] rounded-lg my-4 overflow-x-auto border border-green-900'>
                                   <div className='flex justify-between items-center px-4 py-1 bg-[#163E2C]'>
                                     <span className="text-xs text-green-300">{match?.[1] || "code"}</span>
                                     <CodeCopyButton codeString={codeString} />
@@ -167,7 +168,7 @@ export default function Chatbot() {
                                     customStyle={{
                                       margin: 0,
                                       background: "transparent",
-                                      padding: "1rem",
+                                      padding: "0.75rem 1rem",
                                     }}
                                     {...props}>
                                     {codeString.replace(/\n$/, "")}
@@ -203,15 +204,15 @@ export default function Chatbot() {
             disabled={isStreaming}
             minRows={1}
             maxRows={6}
-            className='flex-grow rounded-lg px-4 py-3 bg-[#163E2C] text-stone-100 placeholder-green-300/50 outline-none focus:ring-2 focus:ring-orange-500 transition-shadow disabled:cursor-not-allowed resize-none'
+            className='flex-grow rounded-lg px-3 py-2 md:px-4 md:py-3 bg-[#163E2C] text-stone-100 placeholder-green-300/50 outline-none focus:ring-2 focus:ring-orange-500 transition-shadow disabled:cursor-not-allowed resize-none'
           />
-          <button onClick={handleMicrophone} className={`ml-2 p-3 rounded-full transition-colors ${listen ? 'bg-red-500 hover:bg-red-600' : 'bg-orange-500 hover:bg-orange-600'}`}>
+          <button onClick={handleMicrophone} className={`ml-2 p-2 md:p-3 rounded-full transition-colors ${listen ? 'bg-red-500 hover:bg-red-600' : 'bg-orange-500 hover:bg-orange-600'}`}>
             <MicrophoneIcon className='h-5 w-5 text-white' />
           </button>
           <button
             onClick={handleSend}
             disabled={!inputText.trim() || isStreaming}
-            className='ml-2 p-3 bg-orange-500 rounded-full hover:bg-orange-600 disabled:bg-green-800 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-[#0B251A] transition-all'>
+            className='ml-2 p-2 md:p-3 bg-orange-500 rounded-full hover:bg-orange-600 disabled:bg-green-800 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-[#0B251A] transition-all'>
             <PaperAirplaneIcon className='h-5 w-5 text-white' />
           </button>
         </div>
