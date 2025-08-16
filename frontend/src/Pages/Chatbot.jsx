@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { PaperAirplaneIcon, ClipboardIcon, CheckIcon, MicrophoneIcon } from "@heroicons/react/24/solid";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { oneDark, } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { BotIcon, UserIcon } from "../utils/Icon";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import TextareaAutosize from 'react-textarea-autosize';
@@ -62,7 +62,7 @@ export default function Chatbot() {
       const response = await fetch(`${API_URL}/chatbot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userQues: userMessage ,session:sessionId}),
+        body: JSON.stringify({ userQues: userMessage, session: sessionId }),
       });
       if (!response.body) throw new Error("No response body");
       const reader = response.body.getReader();
@@ -176,7 +176,7 @@ export default function Chatbot() {
                               );
                             }
                             return (
-                              <code className='text-amber-200 font-semibold font-mono bg-green-900/60 px-1 py-0.5 rounded' {...props}>
+                              <code className='not-prose !bg-black !text-amber-400 font-semibold font-mono px-2 py-1 rounded-lg !border !border-stone-500' {...props}>
                                 {children}
                               </code>
                             );
